@@ -1,9 +1,10 @@
 """
-Flask server for Emotion Detection application with error handling.
+Flask server application for Emotion Detection.
+Provides routes to render web page and perform emotion analysis.
 """
 
-from EmotionDetection.emotion_detection import emotion_detector
 from flask import Flask, render_template, request
+from EmotionDetection.emotion_detection import emotion_detector
 
 app = Flask("Emotion Detector")
 
@@ -11,13 +12,13 @@ app = Flask("Emotion Detector")
 @app.route("/emotionDetector")
 def sent_analyzer():
     """
-    Analyzes input text and handles invalid or blank entries.
+    Analyzes the text provided in the query string using emotion_detector.
+    Returns formatted string with scores or error message if input is invalid.
     """
     text_to_analyze = request.args.get("textToAnalyze")
 
     response = emotion_detector(text_to_analyze)
 
-    # Verificar si la emoción dominante es None (error o texto inválido)
     if response["dominant_emotion"] is None:
         return "Invalid text! Please try again!"
 
@@ -33,7 +34,7 @@ def sent_analyzer():
 @app.route("/")
 def render_index_page():
     """
-    Renders the main index page.
+    Renders the index page HTML template.
     """
     return render_template("index.html")
 
